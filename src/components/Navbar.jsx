@@ -34,13 +34,17 @@ export default function Navbar() {
         background:
           scrolled || menuOpen
             ? "rgba(255,255,255,0.98)"
-            : "rgba(15,10,42,0.18)",
-        backdropFilter: scrolled || menuOpen ? "blur(12px)" : "none",
+            : "rgba(15, 8, 45, 0.96)",
+        backdropFilter: scrolled || menuOpen ? "blur(18px)" : "blur(14px)",
         boxShadow:
-          scrolled || menuOpen ? "0 2px 20px rgba(0,0,0,0.08)" : "none",
+          scrolled || menuOpen
+            ? "0 2px 20px rgba(0,0,0,0.08)"
+            : "0 0 0 1px rgba(255,255,255,0.08)",
         transition: "all 0.3s ease",
         borderBottom:
-          scrolled || menuOpen ? "1px solid rgba(229,231,235,0.6)" : "none",
+          scrolled || menuOpen
+            ? "1px solid rgba(229,231,235,0.6)"
+            : "1px solid rgba(255,255,255,0.1)",
       }}
     >
       <div
@@ -111,9 +115,11 @@ export default function Navbar() {
                   ? "var(--primary)"
                   : scrolled
                     ? "var(--text-secondary)"
-                    : "rgba(255,255,255,0.85)",
+                    : "rgba(255,255,255,0.95)",
                 background: isActive(path)
-                  ? "var(--primary-light)"
+                  ? scrolled
+                    ? "var(--primary-light)"
+                    : "rgba(255,255,255,0.14)"
                   : "transparent",
                 transition: "var(--transition)",
                 position: "relative",
@@ -170,11 +176,11 @@ export default function Navbar() {
             background:
               scrolled || menuOpen
                 ? "var(--primary-light)"
-                : "rgba(15,10,42,0.18)",
+                : "rgba(255,255,255,0.12)",
             border:
               scrolled || menuOpen
                 ? "none"
-                : "1px solid rgba(255,255,255,0.35)",
+                : "1px solid rgba(255,255,255,0.22)",
           }}
         >
           {[0, 1, 2].map((i) => (
