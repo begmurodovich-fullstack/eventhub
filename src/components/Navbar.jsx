@@ -26,13 +26,13 @@ export default function Navbar() {
   return (
     <nav style={{
       position: "fixed", top: 0, left: 0, right: 0, zIndex: 1000,
-      background: scrolled ? "rgba(255,255,255,0.95)" : "transparent",
-      backdropFilter: scrolled ? "blur(12px)" : "none",
-      boxShadow: scrolled ? "0 2px 20px rgba(0,0,0,0.08)" : "none",
+      background: (scrolled || menuOpen) ? "rgba(255,255,255,0.98)" : "transparent",
+      backdropFilter: (scrolled || menuOpen) ? "blur(12px)" : "none",
+      boxShadow: (scrolled || menuOpen) ? "0 2px 20px rgba(0,0,0,0.08)" : "none",
       transition: "all 0.3s ease",
-      borderBottom: scrolled ? "1px solid rgba(229,231,235,0.6)" : "none"
+      borderBottom: (scrolled || menuOpen) ? "1px solid rgba(229,231,235,0.6)" : "none"
     }}>
-      <div className="container" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", height: "72px" }}>
+      <div className="container" style={{ display: "flex", alignItems: "center", justifySpace: "space-between", justifyContent: "space-between", height: "72px" }}>
         {/* Logo */}
         <Link to="/" style={{ display: "flex", alignItems: "center", gap: "10px" }}>
           <div style={{
@@ -46,7 +46,8 @@ export default function Navbar() {
           <span style={{
             fontFamily: "var(--font-display)",
             fontWeight: 800, fontSize: "1.25rem",
-            color: "var(--text-primary)"
+            color: (scrolled || menuOpen) ? "var(--text-primary)" : "white",
+            transition: "color 0.3s ease"
           }}>EventHub</span>
         </Link>
 
@@ -57,14 +58,14 @@ export default function Navbar() {
             { path: "/events", label: "Eventlar" },
             { path: "/my-bookings", label: "Bronlarim" }
           ].map(({ path, label }) => (
-            <Link key={path} to={path} style={{
+            <Link key={path} to={path} className="nav-link" style={{
               padding: "8px 16px",
               borderRadius: "var(--radius-full)",
               fontWeight: 600,
               fontSize: "0.88rem",
               color: isActive(path)
                 ? "var(--primary)"
-                : "var(--text-secondary)",
+                : (scrolled ? "var(--text-secondary)" : "rgba(255,255,255,0.85)"),
               background: isActive(path) ? "var(--primary-light)" : "transparent",
               transition: "var(--transition)",
               position: "relative"
@@ -94,18 +95,19 @@ export default function Navbar() {
           style={{
             display: "none", flexDirection: "column", gap: 5,
             padding: 8, borderRadius: 8,
-            background: scrolled ? "var(--primary-light)" : "var(--primary-light)"
+            background: (scrolled || menuOpen) ? "var(--primary-light)" : "rgba(255,255,255,0.15)",
+            border: (scrolled || menuOpen) ? "none" : "1px solid rgba(255,255,255,0.25)"
           }}
         >
           {[0,1,2].map(i => (
             <span key={i} style={{
               display: "block", width: 22, height: 2,
-              background: "var(--primary)",
+              background: (scrolled || menuOpen) ? "var(--primary)" : "white",
               borderRadius: 2, transition: "all 0.2s",
               transform: menuOpen
-                ? i === 0 ? "rotate(45deg) translate(5px,5px)"
-                : i === 1 ? "opacity: 0"
-                : "rotate(-45deg) translate(5px,-5px)"
+                ? i === 0 ? "translateY(7px) rotate(45deg)"
+                  : i === 1 ? "scale(0)"
+                  : "translateY(-7px) rotate(-45deg)"
                 : "none",
               opacity: menuOpen && i === 1 ? 0 : 1
             }} />
@@ -137,12 +139,6 @@ export default function Navbar() {
         </div>
       )}
 
-      <style>{`
-        @media (max-width: 768px) {
-          .desktop-nav { display: none !important; }
-          .mobile-menu-btn { display: flex !important; }
-        }
-      `}</style>
     </nav>
   );
 }

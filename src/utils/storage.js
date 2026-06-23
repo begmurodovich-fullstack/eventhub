@@ -35,8 +35,27 @@ export const isEventBooked = (eventId) => {
   return bookings.some(b => b.eventId === eventId && b.status === 'confirmed');
 };
 
+export const getEventStats = (event) => {
+  if (!event) return { registered: 0, spotsLeft: 0, isFull: false, fillPct: 0 };
+  const bookings = getBookings().filter(b => b.eventId === event.id && b.status === 'confirmed');
+  const bookedTicketsCount = bookings.reduce((sum, b) => sum + Number(b.tickets), 0);
+  const totalRegistered = event.registered + bookedTicketsCount;
+  const spotsLeft = event.capacity - totalRegistered;
+  return {
+    registered: totalRegistered,
+    spotsLeft: Math.max(0, spotsLeft),
+    isFull: spotsLeft <= 0,
+    fillPct: Math.min((totalRegistered / event.capacity) * 100, 100)
+  };
+};
+
+export const parseLocalDate = (dateStr) => {
+  const [year, month, day] = dateStr.split('-').map(Number);
+  return new Date(year, month - 1, day);
+};
+
 export const formatDate = (dateStr) => {
-  const date = new Date(dateStr);
+  const date = parseLocalDate(dateStr);
   return date.toLocaleDateString('uz-UZ', {
     year: 'numeric',
     month: 'long',
@@ -46,13 +65,18 @@ export const formatDate = (dateStr) => {
 
 export const isToday = (dateStr) => {
   const today = new Date();
-  const date = new Date(dateStr);
-  return date.toDateString() === today.toDateString();
+  today.setHours(0, 0, 0, 0);
+  const date = parseLocalDate(dateStr);
+  return date.getTime() === today.getTime();
 };
 
 export const isThisWeek = (dateStr) => {
   const today = new Date();
-  const date = new Date(dateStr);
-  const weekFromNow = new Date(today.getTime() + 7 * 24 * 60 * 60 * 1000);
+  today.setHours(0, 0, 0, 0);
+  const date = parseLocalDate(dateStr);
+  const weekFromNow = new Date(today);
+  weekFromNow.setDate(today.getDate() + 7);
+  weekFromNow.setHours(23, 59, 59, 999);
   return date >= today && date <= weekFromNow;
 };
+

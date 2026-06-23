@@ -1,12 +1,14 @@
 import { useState, useEffect } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { events } from "../data/events";
-import { saveBooking, formatDate, isEventBooked } from "../utils/storage";
+import { saveBooking, formatDate, isEventBooked, getEventStats } from "../utils/storage";
 
 export default function Booking() {
   const { id } = useParams();
   const navigate = useNavigate();
   const event = events.find(e => e.id === parseInt(id));
+  const { spotsLeft } = getEventStats(event);
+  const maxTickets = event ? Math.min(10, spotsLeft) : 1;
 
   const [form, setForm] = useState({ name: "", email: "", tickets: 1, note: "" });
   const [errors, setErrors] = useState({});
@@ -15,7 +17,16 @@ export default function Booking() {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    if (event && isEventBooked(event.id)) navigate(`/events/${event.id}`);
+    if (event) {
+      if (isEventBooked(event.id)) {
+        navigate(`/events/${event.id}`);
+      } else {
+        const { isFull } = getEventStats(event);
+        if (isFull) {
+          navigate(`/events/${event.id}`);
+        }
+      }
+    }
   }, [event, navigate]);
 
   if (!event) return (
@@ -31,7 +42,15 @@ export default function Booking() {
     const e = {};
     if (!form.name.trim() || form.name.trim().length < 2) e.name = "Ism kamida 2 ta harf bo'lishi kerak";
     if (!form.email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) e.email = "To'g'ri email manzil kiriting";
-    if (!form.tickets || form.tickets < 1 || form.tickets > 10) e.tickets = "Ticket soni 1 dan 10 gacha bo'lishi kerak";
+    
+    const { spotsLeft } = getEventStats(event);
+    if (!form.tickets || form.tickets < 1 || form.tickets > 10) {
+      e.tickets = "Ticket soni 1 dan 10 gacha bo'lishi kerak";
+    } else if (form.tickets > spotsLeft) {
+      e.tickets = spotsLeft > 0 
+        ? `Uzr, faqatgina ${spotsLeft} ta bo'sh joy qoldi` 
+        : "Uzr, bu eventda bo'sh joy qolmagan";
+    }
     return e;
   };
 
@@ -154,17 +173,17 @@ export default function Booking() {
                     className={`form-input ${errors.tickets ? "error" : ""}`}
                     style={{ textAlign: "center", width: 80 }}
                     value={form.tickets}
-                    min={1} max={10}
+                    min={1} max={maxTickets}
                     onChange={e => { setForm({ ...form, tickets: parseInt(e.target.value) || 1 }); setErrors({ ...errors, tickets: "" }); }}
                   />
                   <button
-                    onClick={() => setForm({ ...form, tickets: Math.min(10, form.tickets + 1) })}
+                    onClick={() => setForm({ ...form, tickets: Math.min(maxTickets, form.tickets + 1) })}
                     style={{
                       width: 40, height: 40, borderRadius: "var(--radius-md)",
                       background: "var(--primary-light)", color: "var(--primary)",
                       border: "none", cursor: "pointer", fontSize: "1.2rem", fontWeight: 700
                     }}>+</button>
-                  <span style={{ color: "var(--text-muted)", fontSize: "0.84rem" }}>max 10</span>
+                  <span style={{ color: "var(--text-muted)", fontSize: "0.84rem" }}>max {maxTickets}</span>
                 </div>
                 {errors.tickets && <span className="form-error">⚠️ {errors.tickets}</span>}
               </div>
@@ -253,12 +272,6 @@ export default function Booking() {
         </div>
       </div>
 
-      <style>{`
-        @keyframes spin { to { transform: rotate(360deg); } }
-        @media (max-width: 768px) {
-          .booking-grid { grid-template-columns: 1fr !important; }
-        }
-      `}</style>
     </div>
   );
 }

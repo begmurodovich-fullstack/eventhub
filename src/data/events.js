@@ -1,9 +1,15 @@
+const getRelativeDate = (offsetDays) => {
+  const d = new Date();
+  d.setDate(d.getDate() + offsetDays);
+  return d.toISOString().split('T')[0];
+};
+
 export const events = [
   {
     id: 1,
     title: "Tech Summit 2025",
     category: "Tech",
-    date: "2025-07-15",
+    date: getRelativeDate(2),
     time: "09:00",
     location: "Tashkent IT Park, Uzbekistan",
     price: 0,
@@ -21,7 +27,7 @@ export const events = [
     id: 2,
     title: "Business Leaders Forum",
     category: "Business",
-    date: "2025-07-20",
+    date: getRelativeDate(0), // today
     time: "10:00",
     location: "Hyatt Regency, Tashkent",
     price: 150,
@@ -39,7 +45,7 @@ export const events = [
     id: 3,
     title: "UX/UI Design Masterclass",
     category: "Design",
-    date: "2025-07-22",
+    date: getRelativeDate(4),
     time: "14:00",
     location: "Coworking Space, Mirzo Ulugbek",
     price: 50,
@@ -57,7 +63,7 @@ export const events = [
     id: 4,
     title: "Tashkent Marathon 2025",
     category: "Sport",
-    date: "2025-08-03",
+    date: getRelativeDate(10),
     time: "07:00",
     location: "Amir Temur Square, Tashkent",
     price: 25,
@@ -75,7 +81,7 @@ export const events = [
     id: 5,
     title: "Startup Pitch Night",
     category: "Business",
-    date: "2025-07-28",
+    date: getRelativeDate(0), // today
     time: "18:00",
     location: "INHA University, Tashkent",
     price: 0,
@@ -93,7 +99,7 @@ export const events = [
     id: 6,
     title: "Web Development Bootcamp",
     category: "Tech",
-    date: "2025-08-10",
+    date: getRelativeDate(6),
     time: "09:00",
     location: "PDP Academy, Tashkent",
     price: 0,
@@ -111,7 +117,7 @@ export const events = [
     id: 7,
     title: "Football Championship",
     category: "Sport",
-    date: "2025-07-30",
+    date: getRelativeDate(15),
     time: "15:00",
     location: "Pakhtakor Stadium, Tashkent",
     price: 20,
@@ -129,7 +135,7 @@ export const events = [
     id: 8,
     title: "Brand Identity Workshop",
     category: "Design",
-    date: "2025-08-05",
+    date: getRelativeDate(1), // tomorrow
     time: "11:00",
     location: "Creative Hub, Yunusabad",
     price: 75,
@@ -147,7 +153,7 @@ export const events = [
     id: 9,
     title: "AI & Machine Learning Summit",
     category: "Tech",
-    date: "2025-08-15",
+    date: getRelativeDate(3),
     time: "09:00",
     location: "Westminster University, Tashkent",
     price: 100,
@@ -165,7 +171,7 @@ export const events = [
     id: 10,
     title: "E-Commerce Growth Hacking",
     category: "Business",
-    date: "2025-08-20",
+    date: getRelativeDate(12),
     time: "13:00",
     location: "Grand Mir Hotel, Tashkent",
     price: 80,
@@ -183,7 +189,7 @@ export const events = [
     id: 11,
     title: "Yoga & Wellness Festival",
     category: "Sport",
-    date: "2025-08-08",
+    date: getRelativeDate(8),
     time: "08:00",
     location: "Botanical Garden, Tashkent",
     price: 0,
@@ -201,7 +207,7 @@ export const events = [
     id: 12,
     title: "Motion Graphics Intensive",
     category: "Design",
-    date: "2025-08-12",
+    date: getRelativeDate(5),
     time: "10:00",
     location: "Digital Arts Studio, Chilanzar",
     price: 120,

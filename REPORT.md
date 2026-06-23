@@ -1,7 +1,7 @@
 # 📊 EventHub — Loyiha Hisoboti
 
 **XStudio Frontend Test · Aziz**  
-**Sana:** 2025  
+**Sana:** 2026  
 **Stack:** React 18 + Vite + CSS Custom Properties
 
 ---
@@ -144,14 +144,12 @@ validate() → {
 
 Real-time error clearing: foydalanuvchi yozgan zahot error yo'qoladi.
 
-### 5.4 Capacity System
+### 5.4 Dinamik Sig'im va Overbooking Himoyasi (Real Product Logic)
 
-```
-spotsLeft = capacity - registered
-isFull: danger qizil rang
-isAlmostFull (≤20): warning sariq rang
-Normal: success yashil rang
-```
+Loyihada eventlar uchun capacity (sig'im) tizimi to'liq dinamik va interaktiv qilib shakllantirildi:
+- **Dinamik hisoblash:** Har bir eventning bo'sh joylar soni va progress-bar: `spotsLeft = capacity - (registered + booked_tickets_from_localStorage)` formula orqali hisoblanadi. Bu foydalanuvchi yangi ticket band qilganda joylar soni kamayishini, bronni bekor qilganda esa joylar qayta ko'payishini ta'minlaydi.
+- **Overbooking himoyasi:** Booking formida foydalanuvchi tanlashi mumkin bo'lgan maksimal ticketlar soni `Math.min(10, spotsLeft)` qilib cheklanadi. Agar bo'sh joylar soni 4 ta qolgan bo'lsa, foydalanuvchi 5 ta ticket tanlay olmaydi va form yuborishda real-time xatolik ko'rsatiladi.
+- **Avtomatik Redirect:** Agar event to'lgan bo'lsa, booking sahifasiga kirish cheklanib, foydalanuvchi avtomat ravishda detallar sahifasiga yo'naltiriladi va "Joylar to'ldi" tugmasi ko'rsatiladi.
 
 ---
 

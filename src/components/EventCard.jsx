@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { formatDate } from "../utils/storage";
+import { formatDate, getEventStats } from "../utils/storage";
 import { RightArrow } from "./ArrowIcons";
 
 const categoryColors = {
@@ -10,23 +10,16 @@ const categoryColors = {
 };
 
 export default function EventCard({ event, compact = false }) {
-  const spotsLeft = event.capacity - event.registered;
-  const isFull = spotsLeft <= 0;
+  const { registered, spotsLeft, isFull, fillPct } = getEventStats(event);
   const isAlmostFull = spotsLeft > 0 && spotsLeft <= 20;
 
   return (
     <div className="card" style={{ display: "flex", flexDirection: "column" }}>
       {/* Image */}
-      <div style={{ position: "relative", overflow: "hidden", height: compact ? 160 : 200 }}>
+      <div className="card-image-wrap" style={{ position: "relative", overflow: "hidden", height: compact ? 160 : 200 }}>
         <img
           src={event.image}
           alt={event.title}
-          style={{
-            width: "100%", height: "100%", objectFit: "cover",
-            transition: "transform 0.4s ease"
-          }}
-          onMouseEnter={e => e.target.style.transform = "scale(1.05)"}
-          onMouseLeave={e => e.target.style.transform = "scale(1)"}
           onError={e => {
             e.target.src = `https://placehold.co/800x400/6C47FF/white?text=${encodeURIComponent(event.category)}`;
           }}
@@ -84,13 +77,13 @@ export default function EventCard({ event, compact = false }) {
                 fontWeight: 600,
                 color: isFull ? "var(--danger)" : isAlmostFull ? "var(--warning)" : "var(--success)"
               }}>
-                {isFull ? "To'ldi" : isAlmostFull ? `${spotsLeft} joy qoldi` : `${event.registered}/${event.capacity}`}
+                {isFull ? "To'ldi" : isAlmostFull ? `${spotsLeft} joy qoldi` : `${registered}/${event.capacity}`}
               </span>
             </div>
             <div style={{ height: 5, background: "var(--border)", borderRadius: "var(--radius-full)", overflow: "hidden" }}>
               <div style={{
                 height: "100%",
-                width: `${Math.min((event.registered / event.capacity) * 100, 100)}%`,
+                width: `${fillPct}%`,
                 background: isFull ? "var(--danger)" : isAlmostFull
                   ? "linear-gradient(90deg, var(--warning), var(--accent))"
                   : "linear-gradient(90deg, var(--primary), var(--success))",

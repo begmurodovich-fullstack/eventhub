@@ -2,7 +2,7 @@ import { useParams, Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { events } from "../data/events";
 import EventCard from "../components/EventCard";
-import { formatDate, isEventBooked } from "../utils/storage";
+import { formatDate, isEventBooked, getEventStats } from "../utils/storage";
 
 export default function EventDetail() {
   const { id } = useParams();
@@ -26,9 +26,7 @@ export default function EventDetail() {
   );
 
   const related = events.filter(e => e.category === event.category && e.id !== event.id).slice(0, 3);
-  const spotsLeft = event.capacity - event.registered;
-  const isFull = spotsLeft <= 0;
-  const fillPct = Math.min((event.registered / event.capacity) * 100, 100);
+  const { registered, spotsLeft, isFull, fillPct } = getEventStats(event);
 
   const categoryColors = { Tech: "#2563EB", Business: "#D97706", Design: "#9333EA", Sport: "#16A34A" };
 
@@ -105,7 +103,7 @@ export default function EventDetail() {
                   { icon: "📍", label: "Joylashuv", value: event.location },
                   { icon: "🏷️", label: "Narx", value: event.type === "Free" ? "Bepul" : `$${event.price}` },
                   { icon: "👥", label: "Sig'im", value: `${event.capacity} kishi` },
-                  { icon: "✅", label: "Ro'yxatdan o'tganlar", value: `${event.registered} kishi` }
+                  { icon: "✅", label: "Ro'yxatdan o'tganlar", value: `${registered} kishi` }
                 ].map(({ icon, label, value }) => (
                   <div key={label} style={{ display: "flex", gap: 14, alignItems: "flex-start" }}>
                     <div style={{
@@ -206,7 +204,7 @@ export default function EventDetail() {
                   }} />
                 </div>
                 <div style={{ textAlign: "right", fontSize: "0.75rem", color: "var(--text-muted)", marginTop: 4 }}>
-                  {event.registered} / {event.capacity}
+                  {registered} / {event.capacity}
                 </div>
               </div>
 
@@ -262,11 +260,6 @@ export default function EventDetail() {
         )}
       </div>
 
-      <style>{`
-        @media (max-width: 768px) {
-          .detail-grid { grid-template-columns: 1fr !important; }
-        }
-      `}</style>
     </div>
   );
 }
