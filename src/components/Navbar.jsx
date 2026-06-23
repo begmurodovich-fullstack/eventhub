@@ -26,7 +26,7 @@ export default function Navbar() {
   return (
     <nav style={{
       position: "fixed", top: 0, left: 0, right: 0, zIndex: 1000,
-      background: (scrolled || menuOpen) ? "rgba(255,255,255,0.98)" : "transparent",
+      background: (scrolled || menuOpen) ? "rgba(255,255,255,0.98)" : "rgba(15,10,42,0.18)",
       backdropFilter: (scrolled || menuOpen) ? "blur(12px)" : "none",
       boxShadow: (scrolled || menuOpen) ? "0 2px 20px rgba(0,0,0,0.08)" : "none",
       transition: "all 0.3s ease",
@@ -95,8 +95,8 @@ export default function Navbar() {
           style={{
             display: "none", flexDirection: "column", gap: 5,
             padding: 8, borderRadius: 8,
-            background: (scrolled || menuOpen) ? "var(--primary-light)" : "rgba(255,255,255,0.15)",
-            border: (scrolled || menuOpen) ? "none" : "1px solid rgba(255,255,255,0.25)"
+            background: (scrolled || menuOpen) ? "var(--primary-light)" : "rgba(15,10,42,0.18)",
+            border: (scrolled || menuOpen) ? "none" : "1px solid rgba(255,255,255,0.35)"
           }}
         >
           {[0,1,2].map(i => (
