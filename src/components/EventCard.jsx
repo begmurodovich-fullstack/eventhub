@@ -6,7 +6,7 @@ const categoryColors = {
   Tech: "badge-tech",
   Business: "badge-business",
   Design: "badge-design",
-  Sport: "badge-sport"
+  Sport: "badge-sport",
 };
 
 export default function EventCard({ event, compact = false }) {
@@ -16,53 +16,114 @@ export default function EventCard({ event, compact = false }) {
   return (
     <div className="card" style={{ display: "flex", flexDirection: "column" }}>
       {/* Image */}
-      <div className="card-image-wrap" style={{ position: "relative", overflow: "hidden", height: compact ? 160 : 200 }}>
+      <div
+        className="card-image-wrap"
+        style={{
+          position: "relative",
+          overflow: "hidden",
+          height: compact ? 160 : 200,
+        }}
+      >
         <img
           src={event.image}
           alt={event.title}
-          onError={e => {
+          onError={(e) => {
             e.target.src = `https://placehold.co/800x400/6C47FF/white?text=${encodeURIComponent(event.category)}`;
           }}
         />
-        <div style={{
-          position: "absolute", top: 12, left: 12,
-          display: "flex", gap: 6
-        }}>
-          <span className={`badge ${categoryColors[event.category] || "badge-tech"}`}>
+        <div
+          style={{
+            position: "absolute",
+            top: 12,
+            left: 12,
+            display: "flex",
+            gap: 6,
+          }}
+        >
+          <span
+            className={`badge ${categoryColors[event.category] || "badge-tech"}`}
+          >
             {event.category}
           </span>
-          <span className={`badge ${event.type === "Free" ? "badge-free" : "badge-paid"}`}>
+          <span
+            className={`badge ${event.type === "Free" ? "badge-free" : "badge-paid"}`}
+          >
             {event.type === "Free" ? "✓ Bepul" : `$${event.price}`}
           </span>
         </div>
         {event.featured && (
-          <div style={{
-            position: "absolute", top: 12, right: 12,
-            background: "linear-gradient(135deg,#FF6B35,#ff8c5a)",
-            color: "white", padding: "4px 10px",
-            borderRadius: "var(--radius-full)",
-            fontSize: "0.72rem", fontWeight: 700
-          }}>⭐ Featured</div>
+          <div
+            style={{
+              position: "absolute",
+              top: 12,
+              right: 12,
+              background: "linear-gradient(135deg,#FF6B35,#ff8c5a)",
+              color: "white",
+              padding: "4px 10px",
+              borderRadius: "var(--radius-full)",
+              fontSize: "0.72rem",
+              fontWeight: 700,
+            }}
+          >
+            ⭐ Featured
+          </div>
         )}
       </div>
 
       {/* Content */}
-      <div style={{ padding: compact ? "16px" : "20px", flex: 1, display: "flex", flexDirection: "column", gap: 12 }}>
-        <h3 style={{
-          fontFamily: "var(--font-display)",
-          fontSize: compact ? "1rem" : "1.1rem",
-          fontWeight: 700, color: "var(--text-primary)",
-          lineHeight: 1.3
-        }}>{event.title}</h3>
+      <div
+        style={{
+          padding: compact ? "16px" : "20px",
+          flex: 1,
+          display: "flex",
+          flexDirection: "column",
+          gap: 12,
+        }}
+      >
+        <h3
+          style={{
+            fontFamily: "var(--font-display)",
+            fontSize: compact ? "1rem" : "1.1rem",
+            fontWeight: 700,
+            color: "var(--text-primary)",
+            lineHeight: 1.3,
+          }}
+        >
+          {event.title}
+        </h3>
 
         <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 8, color: "var(--text-secondary)", fontSize: "0.84rem" }}>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 8,
+              color: "var(--text-secondary)",
+              fontSize: "0.84rem",
+            }}
+          >
             <span>📅</span>
-            <span>{formatDate(event.date)} · {event.time}</span>
+            <span>
+              {formatDate(event.date)} · {event.time}
+            </span>
           </div>
-          <div style={{ display: "flex", alignItems: "center", gap: 8, color: "var(--text-secondary)", fontSize: "0.84rem" }}>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 8,
+              color: "var(--text-secondary)",
+              fontSize: "0.84rem",
+            }}
+          >
             <span>📍</span>
-            <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+            <span
+              style={{
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                whiteSpace: "nowrap",
+              }}
+            >
               {event.location}
             </span>
           </div>
@@ -71,25 +132,53 @@ export default function EventCard({ event, compact = false }) {
         {/* Capacity bar */}
         {!compact && (
           <div>
-            <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 6, fontSize: "0.78rem" }}>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                marginBottom: 6,
+                fontSize: "0.78rem",
+              }}
+            >
               <span style={{ color: "var(--text-muted)" }}>Ishtirokchilar</span>
-              <span style={{
-                fontWeight: 600,
-                color: isFull ? "var(--danger)" : isAlmostFull ? "var(--warning)" : "var(--success)"
-              }}>
-                {isFull ? "To'ldi" : isAlmostFull ? `${spotsLeft} joy qoldi` : `${registered}/${event.capacity}`}
+              <span
+                style={{
+                  fontWeight: 600,
+                  color: isFull
+                    ? "var(--danger)"
+                    : isAlmostFull
+                      ? "var(--warning)"
+                      : "var(--success)",
+                }}
+              >
+                {isFull
+                  ? "To'ldi"
+                  : isAlmostFull
+                    ? `${spotsLeft} joy qoldi`
+                    : `${registered}/${event.capacity}`}
               </span>
             </div>
-            <div style={{ height: 5, background: "var(--border)", borderRadius: "var(--radius-full)", overflow: "hidden" }}>
-              <div style={{
-                height: "100%",
-                width: `${fillPct}%`,
-                background: isFull ? "var(--danger)" : isAlmostFull
-                  ? "linear-gradient(90deg, var(--warning), var(--accent))"
-                  : "linear-gradient(90deg, var(--primary), var(--success))",
+            <div
+              style={{
+                height: 5,
+                background: "var(--border)",
                 borderRadius: "var(--radius-full)",
-                transition: "width 0.5s ease"
-              }} />
+                overflow: "hidden",
+              }}
+            >
+              <div
+                style={{
+                  height: "100%",
+                  width: `${fillPct}%`,
+                  background: isFull
+                    ? "var(--danger)"
+                    : isAlmostFull
+                      ? "linear-gradient(90deg, var(--warning), var(--accent))"
+                      : "linear-gradient(90deg, var(--primary), var(--success))",
+                  borderRadius: "var(--radius-full)",
+                  transition: "width 0.5s ease",
+                }}
+              />
             </div>
           </div>
         )}
@@ -97,24 +186,44 @@ export default function EventCard({ event, compact = false }) {
         {/* Tags */}
         {!compact && event.tags && (
           <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
-            {event.tags.map(tag => (
-              <span key={tag} style={{
-                padding: "2px 10px",
-                background: "var(--primary-light)",
-                color: "var(--primary)",
-                borderRadius: "var(--radius-full)",
-                fontSize: "0.72rem", fontWeight: 600
-              }}>#{tag}</span>
+            {event.tags.map((tag) => (
+              <span
+                key={tag}
+                style={{
+                  padding: "2px 10px",
+                  background: "var(--primary-light)",
+                  color: "var(--primary)",
+                  borderRadius: "var(--radius-full)",
+                  fontSize: "0.72rem",
+                  fontWeight: 600,
+                }}
+              >
+                #{tag}
+              </span>
             ))}
           </div>
         )}
 
         {/* Footer */}
-        <div style={{ marginTop: "auto", paddingTop: 8, display: "flex", gap: 10 }}>
+        <div
+          style={{
+            marginTop: "auto",
+            paddingTop: 8,
+            display: "flex",
+            gap: 10,
+            flexWrap: "wrap",
+            alignItems: "stretch",
+          }}
+        >
           <Link
             to={`/events/${event.id}`}
             className="btn btn-primary btn-sm"
-            style={{ flex: 1, justifyContent: "center", gap: 6 }}
+            style={{
+              flex: "1 1 130px",
+              minWidth: 0,
+              justifyContent: "center",
+              gap: 6,
+            }}
           >
             Batafsil ko'rish <RightArrow size={14} color="white" />
           </Link>
@@ -122,7 +231,12 @@ export default function EventCard({ event, compact = false }) {
             <Link
               to={`/booking/${event.id}`}
               className="btn btn-outline btn-sm"
-              style={{ flex: 1, justifyContent: "center", gap: 6 }}
+              style={{
+                flex: "1 1 130px",
+                minWidth: 0,
+                justifyContent: "center",
+                gap: 6,
+              }}
             >
               Bron qilish <RightArrow size={14} color="var(--primary)" />
             </Link>
